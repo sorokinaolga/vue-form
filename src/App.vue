@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1>Регистрация нового клиента</h1>
     <FormUserCreate />
   </div>
 </template>
