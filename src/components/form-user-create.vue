@@ -1,295 +1,59 @@
 <template>
-  <form class="user-form" @submit.prevent="checkData">
-
-    <h2>Личные данные</h2>
-    <div class="user-form__item">
-      <label for="surname">Фамилия*</label>
-      <input
-        :class="$v.user.surname.$error && 'invalid'"
-        type="text" 
-        id="surname" 
-        placeholder="" 
-        v-model.trim="user.surname"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="name">Имя*</label>
-      <input
-        :class="$v.user.name.$error && 'invalid'"
-        type="text" 
-        id="name" 
-        placeholder=""
-        v-model.trim="user.name"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="patronym">Отчество</label>
-      <input 
-        type="text" 
-        id="patronym" 
-        placeholder=""
-        v-model.trim="user.patronym"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="birthdate">Дата рождения*</label>
-      <input
-        :class="$v.user.birthdate.$error && 'invalid'" 
-        type="date" 
-        id="birthdate"
-        v-model="user.birthdate"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="phone">Номер телефона*</label>
-      <input
-        :class="$v.user.phone.$error && 'invalid'" 
-        type="tel" 
-        id="phone" 
-        placeholder="79999999999"
-        v-model="user.phone"
-      />
-    </div>
-    <div class="user-form__item">
-      <span class="label">Пол</span>
-      <div class="user-form__box">
-        <input 
-          type="radio" 
-          id="man" 
-          name="gender" 
-          value="man"
-          v-model="user.gender"
-        />
-        <label for="man">Мужской</label>
-        <input 
-          type="radio" 
-          id="woman" 
-          name="gender" 
-          value="woman"
-          v-model="user.gender"
-        />
-        <label for="woman">Женский</label>
-      </div>
-    </div>
-    <div class="user-form__item">
-      <label for="customer-group">Группа клиентов*</label>
-      <select
-        :class="$v.user.customerGroup.$error && 'invalid'"
-        id="customer-group" 
-        multiple 
-        v-model="user.customerGroup"
-      >
-        <option value="vip">VIP</option>
-        <option value="trouble">Проблемные</option>
-        <option value="insured">ОМС</option>
-      </select>
-    </div>
-    <div class="user-form__item">
-      <label for="doctor">Лечащий врач</label>
-      <select 
-        id="doctor" 
-        v-model="user.doctor"
-      >
-        <option disabled value="">Фамилия врача</option>
-        <option
-          v-for="doctor in doctors"
-          :key="doctor" 
-          :value="doctor"
-        >
-          {{ doctor }}
-        </option>
-      </select>
-    </div>
-    <div class="user-form__box">
-      <input 
-        type="checkbox" 
-        id="no-send-sms" 
-        v-model="user.noSendSms"
-      >
-      <label for="no-send-sms">Не отправлять СМС</label>
-    </div>
-
-    <h2>Адрес</h2>
-    <div class="user-form__item">
-      <label for="post-code">Индекс</label>
-      <input 
-        type="number" 
-        id="post-code" 
-        placeholder="" 
-        v-model="user.address.postCode"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="country">Страна</label>
-      <input 
-        type="text" 
-        id="country" 
-        placeholder="" 
-        v-model.trim="user.address.country"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="area">Область</label>
-      <input 
-        type="text" 
-        id="area" 
-        placeholder="" 
-        v-model.trim="user.address.area"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="city">Город*</label>
-      <input
-        :class="$v.user.address.city.$error && 'invalid'"
-        type="text" 
-        id="city" 
-        placeholder="" 
-        v-model.trim="user.address.city"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="street">Улица</label>
-      <input 
-        type="text" 
-        id="street" 
-        placeholder="" 
-        v-model.trim="user.address.street"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="house">Дом</label>
-      <input 
-        type="text" 
-        id="house" 
-        placeholder="" 
-        v-model.trim="user.address.house"
-      />
-    </div>
-
-    <h2>Удостоверяющий документ</h2>
-    <div class="user-form__item">
-      <label for="document-type">Тип документа</label>
-      <select 
-        id="document-type" 
-        v-model="user.document.type"
-      >
-        <option disabled value="">Тип документа</option>
-        <option
-          v-for="type in documentTypes"
-          :key="type" 
-          :value="type"
-        >
-          {{ type }}
-        </option>
-      </select>
-    </div>
-    <div class="user-form__item">
-      <label for="series">Серия</label>
-      <input 
-        type="number" 
-        id="series" 
-        placeholder="" 
-        v-model="user.document.series"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="number">Номер</label>
-      <input 
-        type="number" 
-        id="number" 
-        placeholder="" 
-        v-model="user.document.number"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="issued-by-whom">Кем выдан</label>
-      <input 
-        type="text" 
-        id="issued-by-whom" 
-        placeholder="" 
-        v-model.trim="user.document.issuedByWhom"
-      />
-    </div>
-    <div class="user-form__item">
-      <label for="date-of-issue">Дата выдачи*</label>
-      <input
-        :class="$v.user.document.dateOfIssue.$error && 'invalid'" 
-        type="date" 
-        id="date-of-issue" 
-        v-model="user.document.dateOfIssue"
-      />
-    </div>
-
-    <button type="submit" class="btn">Зарегистрировать</button>
-  </form>
+  <div>
+    <PersonalData 
+      v-if="currentStep === 1" 
+      :doctors="doctors" 
+      :currentStep="currentStep"
+      :changeData="changeData" 
+      :goNext="goNext" 
+    />
+    <AddressData 
+      v-if="currentStep === 2" 
+      :currentStep="currentStep" 
+      :changeData="changeData"
+      :goNext="goNext" 
+    />
+    <DocumentData 
+      v-if="currentStep === 3" 
+      :documentTypes="documentTypes" 
+      :changeData="changeData"
+      :action="createNewUser"
+    />
+  </div>
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate';
-import { required } from 'vuelidate/lib/validators';
+import AddressData from './address-data.vue';
+import PersonalData from './personal-data.vue';
+import DocumentData from './document-data.vue';
 
 export default {
-  mixins: [validationMixin],
+  components: { PersonalData, AddressData, DocumentData },
   data() {
     return {
+      currentStep: 1,
       doctors: ["Иванов", "Захаров", "Чернышева"],
       documentTypes: ["Паспорт", "Свидетельство о рождении", "Водительское удостоверение"],
-      user: {
-        surname: '',
-        name: '',
-        patronym: '',
-        birthdate: '',
-        phone: '',
-        gender: '',
-        customerGroup: [],
-        doctor: '',
-        noSendSms: false,
-        address: {
-          postCode: '',
-          country: '',
-          area: '',
-          city: '',
-          street: '',
-          house: '',
-        },
-        document: {
-          type: '',
-          series: '',
-          number: '',
-          issuedByWhom: '',
-          dateOfIssue: '',
-        }
-      }
-    }
-  },
-  validations: {
-    user: {
-      surname: { required },
-      name: { required },
-      birthdate: { required },
-      phone: { required },
-      customerGroup: { required },
-      address: { 
-        city: { required }
-      },
-      document: {
-        dateOfIssue: { required }
-      }
+      user: {},
     }
   },
   methods: {
-    checkData() {
-      this.$v.user.$touch()
-      if (!this.$v.user.$error) {
-        alert('Новый клиент успешно создан');
-      }
+    changeData(newData) {
+      Object.assign(this.user, newData);
+      console.log(this.user);
+    },
+    goNext(step) {
+      this.currentStep = step;
+    },
+    createNewUser() {
+      alert('Новый пользователь создан');
     }
   }
 }
 </script>
 
 <style lang="sass">
-.user-form
+.user-form__group
   background: #fff
   max-width: 600px
   text-align: left
@@ -300,6 +64,9 @@ export default {
   border-radius: 14px
   box-shadow: 0 10px 25px rgba(0,0,0,0.2)
   border: solid 2px #ccc
+
+.user-form__group--invalid
+  border-color: #e63946
 
 .user-form__item
   display: flex
