@@ -1,25 +1,25 @@
 <template>
-  <form class="user-form">
+  <form class="user-form" @submit.prevent="checkData">
 
     <h2>Личные данные</h2>
     <div class="user-form__item">
       <label for="surname">Фамилия*</label>
-      <input 
+      <input
+        :class="$v.user.surname.$error && 'invalid'"
         type="text" 
         id="surname" 
         placeholder="" 
         v-model.trim="user.surname"
-        required 
       />
     </div>
     <div class="user-form__item">
       <label for="name">Имя*</label>
-      <input 
+      <input
+        :class="$v.user.name.$error && 'invalid'"
         type="text" 
         id="name" 
         placeholder=""
         v-model.trim="user.name"
-        required
       />
     </div>
     <div class="user-form__item">
@@ -33,21 +33,21 @@
     </div>
     <div class="user-form__item">
       <label for="birthdate">Дата рождения*</label>
-      <input 
+      <input
+        :class="$v.user.birthdate.$error && 'invalid'" 
         type="date" 
         id="birthdate"
         v-model="user.birthdate"
-        required
       />
     </div>
     <div class="user-form__item">
       <label for="phone">Номер телефона*</label>
-      <input 
+      <input
+        :class="$v.user.phone.$error && 'invalid'" 
         type="tel" 
         id="phone" 
-        placeholder=""
+        placeholder="79999999999"
         v-model="user.phone"
-        required
       />
     </div>
     <div class="user-form__item">
@@ -73,11 +73,11 @@
     </div>
     <div class="user-form__item">
       <label for="customer-group">Группа клиентов*</label>
-      <select 
+      <select
+        :class="$v.user.customerGroup.$error && 'invalid'"
         id="customer-group" 
         multiple 
         v-model="user.customerGroup"
-        required
       >
         <option value="vip">VIP</option>
         <option value="trouble">Проблемные</option>
@@ -139,12 +139,12 @@
     </div>
     <div class="user-form__item">
       <label for="city">Город*</label>
-      <input 
+      <input
+        :class="$v.user.address.city.$error && 'invalid'"
         type="text" 
         id="city" 
         placeholder="" 
         v-model.trim="user.address.city"
-        required
       />
     </div>
     <div class="user-form__item">
@@ -212,11 +212,11 @@
     </div>
     <div class="user-form__item">
       <label for="date-of-issue">Дата выдачи*</label>
-      <input 
+      <input
+        :class="$v.user.document.dateOfIssue.$error && 'invalid'" 
         type="date" 
         id="date-of-issue" 
         v-model="user.document.dateOfIssue"
-        required
       />
     </div>
 
@@ -225,7 +225,11 @@
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate';
+import { required } from 'vuelidate/lib/validators';
+
 export default {
+  mixins: [validationMixin],
   data() {
     return {
       doctors: ["Иванов", "Захаров", "Чернышева"],
@@ -255,6 +259,29 @@ export default {
           issuedByWhom: '',
           dateOfIssue: '',
         }
+      }
+    }
+  },
+  validations: {
+    user: {
+      surname: { required },
+      name: { required },
+      birthdate: { required },
+      phone: { required },
+      customerGroup: { required },
+      address: { 
+        city: { required }
+      },
+      document: {
+        dateOfIssue: { required }
+      }
+    }
+  },
+  methods: {
+    checkData() {
+      this.$v.user.$touch()
+      if (!this.$v.user.$error) {
+        alert('Новый клиент успешно создан');
       }
     }
   }
@@ -302,6 +329,7 @@ select:focus
   background: #eee
 
 select
+  overflow: hidden
   border: solid 1px #ccc
 
 input[type="checkbox"],
@@ -338,15 +366,8 @@ input[type="checkbox"]:checked::before,
 input[type="radio"]:checked::before
   transform: scale(1)
 
-// input[type="text"]:valid,
-// input[type="tel"]:valid,
-// input[type="number"]:valid
-//   border: solid 2px #05bc55
-
-// input[type="text"]:invalid,
-// input[type="tel"]:invalid,
-// input[type="number"]:invalid
-//   border: solid 2px #e63946
+.invalid
+  border: solid 2px #e63946
 
 .btn
   background: #05bc55
