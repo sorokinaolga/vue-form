@@ -52,6 +52,9 @@
         :class="$v.user.document.dateOfIssue.$error && 'invalid'"  
         v-model="user.document.dateOfIssue"
       />
+      <p v-if="$v.user.document.dateOfIssue.$error" class="error-message">
+        Поле обязательно для заполнения, дата не позднее текущей
+      </p>
     </div>
 
     <button type="button" class="btn" @click="checkData">Зарегистрировать</button>

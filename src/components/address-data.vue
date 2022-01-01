@@ -6,7 +6,6 @@
       <input 
         type="number" 
         id="post-code" 
-        placeholder="" 
         v-model="user.address.postCode"
       />
     </div>
@@ -15,7 +14,6 @@
       <input 
         type="text" 
         id="country" 
-        placeholder="" 
         v-model.trim="user.address.country"
       />
     </div>
@@ -24,7 +22,6 @@
       <input 
         type="text" 
         id="area" 
-        placeholder="" 
         v-model.trim="user.address.area"
       />
     </div>
@@ -33,17 +30,19 @@
       <input
         type="text" 
         id="city" 
-        placeholder="" 
+        placeholder="Введите город" 
         v-model.trim="user.address.city"
         :class="$v.user.address.city.$error && 'invalid'" 
       />
+      <p v-if="$v.user.address.city.$error" class="error-message">
+        Поле обязательно для заполнения
+      </p>
     </div>
     <div class="user-form__item">
       <label for="street">Улица</label>
       <input 
         type="text" 
         id="street" 
-        placeholder="" 
         v-model.trim="user.address.street"
       />
     </div>
@@ -52,7 +51,6 @@
       <input 
         type="text" 
         id="house" 
-        placeholder="" 
         v-model.trim="user.address.house"
       />
     </div>

@@ -40,7 +40,6 @@ export default {
   methods: {
     changeData(newData) {
       Object.assign(this.user, newData);
-      console.log(this.user);
     },
     goNext(step) {
       this.currentStep = step;
@@ -148,4 +147,11 @@ input[type="radio"]:checked::before
 
 .btn:hover
   background: #047a37
+
+.error-message
+  color: #e63946
+  font-size: 10px
+  line-height: 10px
+  margin: 0
+  padding: 2px
 </style>

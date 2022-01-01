@@ -6,27 +6,32 @@
       <input
         type="text" 
         id="surname" 
-        placeholder=""
+        placeholder="Введите фамилию"
         :class="$v.user.surname.$error && 'invalid'" 
         v-model.trim="user.surname"
       />
+      <p v-if="$v.user.surname.$error" class="error-message">
+        Поле обязательно для заполнения
+      </p>
     </div>
     <div class="user-form__item">
       <label for="name">Имя*</label>
       <input
         type="text" 
         id="name" 
-        placeholder=""
+        placeholder="Введите имя"
         :class="$v.user.name.$error && 'invalid'" 
         v-model.trim="user.name"
       />
+      <p v-if="$v.user.name.$error" class="error-message">
+        Поле обязательно для заполнения
+      </p>
     </div>
     <div class="user-form__item">
       <label for="patronym">Отчество</label>
       <input 
         type="text" 
         id="patronym" 
-        placeholder=""
         v-model.trim="user.patronym"
       />
     </div>
@@ -38,6 +43,9 @@
         :class="$v.user.birthdate.$error && 'invalid'" 
         v-model="user.birthdate"
       />
+      <p v-if="$v.user.birthdate.$error" class="error-message">
+        Поле обязательно для заполнения, дата не позднее текущей
+      </p>
     </div>
     <div class="user-form__item">
       <label for="phone">Номер телефона*</label>
@@ -48,6 +56,9 @@
         :class="$v.user.phone.$error && 'invalid'" 
         v-model="user.phone"
       />
+      <p v-if="$v.user.phone.$error" class="error-message">
+        Номер телефона должен быть заполнен в формате: 79999999999
+      </p>
     </div>
     <div class="user-form__item">
       <span class="label">Пол</span>
@@ -82,6 +93,9 @@
         <option value="trouble">Проблемные</option>
         <option value="insured">ОМС</option>
       </select>
+      <p v-if="$v.user.customerGroup.$error" class="error-message">
+        Поле обязательно для заполнения
+      </p>
     </div>
     <div class="user-form__item">
       <label for="doctor">Лечащий врач</label>
