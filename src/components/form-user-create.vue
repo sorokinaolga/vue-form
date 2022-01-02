@@ -75,18 +75,23 @@ export default {
   display: flex
   align-items: center
 
+.user-form__label
+  padding-top: 0
+
 label,
 .label
   font-weight: 500
   font-size: 16px
-  padding: 6px
+  padding-top: 8px
+  padding-left: 8px
+  padding-right: 6px
 
 input,
 select
   border: none
   background: #eee
   padding: 10px
-  margin: 10px 5px
+  margin: 5px 5px 10px 5px
   border-radius: 10px
   font: inherit
 
@@ -112,6 +117,7 @@ input[type="radio"]
   border-radius: 2px
   display: grid
   place-content: center
+  margin-bottom: 5px
 
 input[type="checkbox"]::before,
 input[type="radio"]::before
@@ -132,9 +138,6 @@ input[type="checkbox"]:checked::before,
 input[type="radio"]:checked::before
   transform: scale(1)
 
-.invalid
-  border: solid 2px #e63946
-
 .btn
   background: #05bc55
   border: none
@@ -154,4 +157,30 @@ input[type="radio"]:checked::before
   line-height: 10px
   margin: 0
   padding: 2px
+
+.multiselect
+  position: relative
+  display: inline-flex
+  width: 96%
+  border: 1px solid #ccc
+  background: #eee
+  padding: 5px
+  margin: 5px
+  border-radius: 10px
+  font: inherit
+
+.multiselect::before
+  position: absolute
+  content: ''
+  width: 5px
+  height: 5px
+  right: -55px
+  top: 15px
+  border-top: 2px solid #000
+  border-right: 2px solid #000
+  margin-right: 60px
+  transform: rotate(135deg)
+
+.invalid
+  border: solid 2px #e63946
 </style>

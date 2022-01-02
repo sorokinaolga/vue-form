@@ -70,7 +70,7 @@
           value="man"
           v-model="user.gender"
         />
-        <label for="man">Мужской</label>
+        <label class="user-form__label" for="man">Мужской</label>
         <input 
           type="radio" 
           id="woman" 
@@ -78,21 +78,30 @@
           value="woman"
           v-model="user.gender"
         />
-        <label for="woman">Женский</label>
+        <label class="user-form__label" for="woman">Женский</label>
       </div>
     </div>
     <div class="user-form__item">
       <label for="customer-group">Группа клиентов*</label>
-      <select
-        id="customer-group" 
-        multiple 
-        v-model="user.customerGroup"
+      <multi-select
+        class="multiselect"
         :class="$v.user.customerGroup.$error && 'invalid'" 
-      >
-        <option value="vip">VIP</option>
-        <option value="trouble">Проблемные</option>
-        <option value="insured">ОМС</option>
-      </select>
+        :items="groups"
+        :selected="user.customerGroup"
+        prop-name="name"
+        prop-value="id"
+        @selected="updateCustomerGroup"
+      />
+      <div>
+        <chip
+          v-for="(item, i) in user.customerGroup"
+          :key="`${item.id}-${i}`"
+          :item="item"
+          prop-name="name"
+          prop-value="id"
+          @remove="removeFromCustomerGroup"
+        />
+      </div>
       <p v-if="$v.user.customerGroup.$error" class="error-message">
         Поле обязательно для заполнения
       </p>
@@ -119,7 +128,7 @@
         id="no-send-sms" 
         v-model="user.noSendSms"
       >
-      <label for="no-send-sms">Не отправлять СМС</label>
+      <label class="user-form__label" for="no-send-sms">Не отправлять СМС</label>
     </div>
 
     <button type="button" class="btn" @click="checkData">Продолжить</button>
@@ -130,8 +139,14 @@
 import { validationMixin } from 'vuelidate';
 import { required, minLength } from 'vuelidate/lib/validators';
 import { validPhone, validDate } from '../validators';
+import MultiSelect from './multi-select.vue';
+import Chip from './chip.vue';
 
 export default {
+  components: {
+    MultiSelect,
+    Chip
+  },
   mixins: [validationMixin],
   props: {
     doctors: {
@@ -149,6 +164,20 @@ export default {
   },
   data() {
     return {
+      groups: [
+        {
+          id: 1,
+          name: 'VIP'
+        },
+        {
+          id: 2,
+          name: 'Проблемные'
+        },
+        {
+          id: 3,
+          name: 'ОМС'
+        },
+      ],
       user: {
         surname: '',
         name: '',
@@ -178,6 +207,18 @@ export default {
         this.changeData(this.user);
         this.goNext(this.currentStep + 1);
       }
+    },
+    addToSelected(item) {
+      this.user.customerGroup.push(item);
+    },
+    removeFromCustomerGroup(item) {
+      this.user.customerGroup = this.user.customerGroup.filter(selected => selected.id !== item.id);
+    },
+    updateCustomerGroup(item) {
+      const foundIndex = this.user.customerGroup.findIndex(selected => selected.id === item.id);
+        foundIndex > -1
+          ? this.removeFromCustomerGroup(item)
+          : this.addToSelected(item);
     }
   }
 }
